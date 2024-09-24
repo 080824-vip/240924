@@ -1,1 +1,1 @@
-domain chiase.sale
+chiase.sale

@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Đọc domain từ file domain.txt
-DOMAIN=$(cat domain.txt)
+DOMAIN=$(cat /home/user/domain.txt)
 
-# Cài đặt tmpmail
-git clone https://github.com/sdushantha/tmpmail
-cd tmpmail
-sudo make install
-
-# Sử dụng tmpmail với domain tùy chỉnh
-tmpmail --domain $DOMAIN
+# Sử dụng API của 1secmail với domain tùy chỉnh
+RESPONSE=$(curl -s "https://www.1secmail.com/api/v1/?action=genRandomMailbox&count=1&domain=$DOMAIN")
+if [[ $RESPONSE == *"@"* ]]; then
+    EMAIL=$(echo $RESPONSE | jq -r '.[0]')
+echo "Generated email: $EMAIL"
+else
+    echo "Domain $DOMAIN is not accepted by 1secmail API. Using default domain."
+fi
